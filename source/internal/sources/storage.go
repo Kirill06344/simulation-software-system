@@ -18,12 +18,13 @@ func NewSourceStorage(sourcesAmount int32, requestAmount int32, pd *internal.Poi
 	return &Storage{sources: sources, requestAmount: requestAmount}
 }
 
-func (storage *Storage) GenerateRequest() (string, error) {
+func (storage *Storage) GenerateRequest() (*Request, error) {
 	if storage.requestAmount > 0 {
 		storage.requestAmount--
-		return storage.getYoungestSource().generateRequest(), nil
+		var request Request = storage.getYoungestSource().generateRequest()
+		return &request, nil
 	}
-	return "", errors.New("storage is empty")
+	return nil, errors.New("storage is empty")
 }
 
 func (storage *Storage) getYoungestSource() *Source {

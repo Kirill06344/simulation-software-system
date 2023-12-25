@@ -1,7 +1,7 @@
 package sources
 
 import (
-	"fmt"
+	"github.com/google/uuid"
 	"stewie.com/source/internal"
 )
 
@@ -19,8 +19,12 @@ func NewSource(id int32, pd *internal.PoissonDistribution) *Source {
 	}
 }
 
-func (source *Source) generateRequest() string {
-	request := fmt.Sprintf("sourceId: %d, time: %f", source.id, source.nextGenerationTime)
+func (source *Source) generateRequest() Request {
+	request := Request{
+		Id:          uuid.New().String(),
+		CurrentTime: source.nextGenerationTime,
+		SourceId:    source.id,
+	}
 	source.nextGenerationTime += source.distribution.DetermineInterval()
 	return request
 }
