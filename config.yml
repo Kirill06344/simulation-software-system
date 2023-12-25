@@ -1,0 +1,7 @@
+alpha: 0
+beta: 1
+lambda: 3
+sourcesAmount: 10
+devices: 10
+requestsAmount: 500
+bufferCapacity: 10
