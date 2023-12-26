@@ -2,6 +2,7 @@ package producer
 
 import (
 	"context"
+	"errors"
 	"github.com/segmentio/kafka-go"
 	"log"
 	"time"
@@ -16,7 +17,7 @@ func NewProducer(address, topic string) *Producer {
 		Addr:                   kafka.TCP(address),
 		Topic:                  topic,
 		AllowAutoTopicCreation: true,
-		BatchSize:              1,
+		BatchSize:              10,
 		BatchTimeout:           10 * time.Millisecond,
 	}
 
@@ -24,10 +25,25 @@ func NewProducer(address, topic string) *Producer {
 }
 
 func (p *Producer) Write(message *kafka.Message) error {
-	err := p.writer.WriteMessages(context.Background(), *message)
-	if err != nil {
-		return err
+	var err error
+	const retries = 3
+	for i := 0; i < retries; i++ {
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+
+		// attempt to create topic prior to publishing the message
+		err = p.writer.WriteMessages(ctx, *message)
+		if errors.Is(err, kafka.LeaderNotAvailable) || errors.Is(err, context.DeadlineExceeded) {
+			time.Sleep(time.Millisecond * 250)
+			continue
+		}
+
+		if err != nil {
+			return err
+		}
+		break
 	}
+
 	return nil
 }
 
