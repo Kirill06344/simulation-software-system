@@ -1,4 +1,4 @@
-package sources
+package types
 
 type Request struct {
 	Id          string  `json:"id"`

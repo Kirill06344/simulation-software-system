@@ -3,6 +3,7 @@ package sources
 import (
 	"errors"
 	"stewie.com/source/internal"
+	"stewie.com/source/internal/types"
 )
 
 type Storage struct {
@@ -18,10 +19,10 @@ func NewSourceStorage(sourcesAmount int32, requestAmount int32, pd *internal.Poi
 	return &Storage{sources: sources, requestAmount: requestAmount}
 }
 
-func (storage *Storage) GenerateRequest() (*Request, error) {
+func (storage *Storage) GenerateRequest() (*types.Request, error) {
 	if storage.requestAmount > 0 {
 		storage.requestAmount--
-		var request Request = storage.getYoungestSource().generateRequest()
+		var request = storage.getYoungestSource().generateRequest()
 		return &request, nil
 	}
 	return nil, errors.New("storage is empty")
