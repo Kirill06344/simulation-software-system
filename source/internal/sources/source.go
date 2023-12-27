@@ -25,6 +25,7 @@ func (source *Source) generateRequest() types.Request {
 	request := types.Request{
 		Id:             requestId,
 		GenerationTime: source.nextGenerationTime,
+		CurrentTime:    source.nextGenerationTime,
 		SourceId:       source.id,
 	}
 	requestId++
