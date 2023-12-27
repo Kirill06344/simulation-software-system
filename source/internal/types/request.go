@@ -1,7 +1,8 @@
 package types
 
 type Request struct {
-	Id          string  `json:"id"`
-	CurrentTime float32 `json:"currentTime"`
-	SourceId    int32   `json:"sourceId"`
+	Id             uint32  `json:"id"`
+	GenerationTime float32 `json:"generationTime"`
+	CurrentTime    float32 `json:"currentTime"`
+	SourceId       int32   `json:"sourceId"`
 }

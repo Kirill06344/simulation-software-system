@@ -1,10 +1,11 @@
 package sources
 
 import (
-	"github.com/google/uuid"
 	"stewie.com/source/internal"
 	"stewie.com/source/internal/types"
 )
+
+var requestId uint32 = 1
 
 type Source struct {
 	id                 int32
@@ -22,10 +23,11 @@ func NewSource(id int32, pd *internal.PoissonDistribution) *Source {
 
 func (source *Source) generateRequest() types.Request {
 	request := types.Request{
-		Id:          uuid.New().String(),
-		CurrentTime: source.nextGenerationTime,
-		SourceId:    source.id,
+		Id:             requestId,
+		GenerationTime: source.nextGenerationTime,
+		SourceId:       source.id,
 	}
+	requestId++
 	source.nextGenerationTime += source.distribution.DetermineInterval()
 	return request
 }

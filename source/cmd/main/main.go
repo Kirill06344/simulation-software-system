@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/segmentio/kafka-go"
-	"log"
+	log "github.com/sirupsen/logrus"
 	"stewie.com/source/internal"
 	prod "stewie.com/source/internal/producer"
 	"stewie.com/source/internal/sources"
@@ -29,10 +29,11 @@ func main() {
 		}
 		requestJSON, _ := json.Marshal(*request)
 		err = producer.Write(&kafka.Message{Value: requestJSON})
-		log.Print(request)
 		if err != nil {
 			log.Fatal("failed to write messages:", err)
 		}
+
+		log.Infof("Request %d generated on source %d at %f", request.Id, request.SourceId, request.GenerationTime)
 	}
 
 }
