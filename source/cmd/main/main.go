@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	cfg, err := util.LoadConfig("../config.yml")
+	cfg, err := util.LoadConfig("config.yml")
 	if err != nil {
 		fmt.Println(err)
 		return
