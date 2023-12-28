@@ -22,7 +22,6 @@ func (rh *RequestHandler) Process() {
 			logrus.Fatalln(err)
 			continue
 		}
-		logrus.Infoln(request)
 		request.CurrentTime = request.GenerationTime + rh.imitateDelay()
 		requestJSON, _ := json.Marshal(*request)
 		err = rh.Producer.Write(&kafka.Message{Value: requestJSON})
